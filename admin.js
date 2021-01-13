@@ -18,14 +18,20 @@ const sequelize = new Sequelize(
 
 // Initiate Models
 const Customer = require("./models/Customer")(sequelize);
+const Item = require("./models/Item")(sequelize);
+const Employee = require("./models/Employee")(sequelize);
+const Motorcycle = require("./models/Motorcycle")(sequelize);
+
+Customer.hasMany(Motorcycle);
+Motorcycle.belongsTo(Customer);
 
 const express = require("express");
 const app = express();
 
 const run = async () => {
-  await Customer.sync({ force: true });
+  await sequelize.sync({ force: true });
   const adminBro = new AdminBro({
-    resources: [Customer],
+    resources: [Customer, Item, Employee, Motorcycle],
     databases: [],
     rootPath: "/admin",
   });
