@@ -5,7 +5,8 @@ const AdminBroExpress = require("@admin-bro/express");
 const AdminBroSequelize = require("@admin-bro/sequelize");
 AdminBro.registerAdapter(AdminBroSequelize);
 
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize } = require("sequelize");
+
 const sequelize = new Sequelize(
   process.env.DATABASE,
   process.env.LOGIN,
@@ -15,27 +16,8 @@ const sequelize = new Sequelize(
   }
 );
 
-const Customer = sequelize.define(
-  "Customer",
-  {
-    // Model attributes are defined here
-    IDPelanggan: {
-      type: DataTypes.UUID,
-      defaultValue: Sequelize.UUIDV4,
-      allowNull: false,
-    },
-    NamaPelanggan: {
-      type: DataTypes.STRING,
-    },
-    Alamat: DataTypes.STRING(1000),
-    NomorTelepon: DataTypes.STRING(15),
-  },
-  {
-    tableName: "Pelanggan",
-  }
-);
-
-console.log(Customer === sequelize.models.Customer);
+// Initiate Models
+const Customer = require("./models/Customer")(sequelize);
 
 const express = require("express");
 const app = express();
