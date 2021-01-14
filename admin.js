@@ -58,9 +58,33 @@ const run = async () => {
   await sequelize.sync({ force: true });
   const adminBro = new AdminBro({
     resources: [
-      { resource: Customer, options: { navigation: masterNavigation } },
-      { resource: Item, options: { navigation: masterNavigation } },
-      { resource: Employee, options: { navigation: masterNavigation } },
+      {
+        resource: Customer,
+        options: {
+          navigation: masterNavigation,
+          properties: {
+            NamaPelanggan: { isTitle: true },
+          },
+        },
+      },
+      {
+        resource: Item,
+        options: {
+          navigation: masterNavigation,
+          properties: {
+            NamaBarang: { isTitle: true },
+          },
+        },
+      },
+      {
+        resource: Employee,
+        options: {
+          navigation: masterNavigation,
+          properties: {
+            NamaPegawai: { isTitle: true },
+          },
+        },
+      },
       { resource: Motorcycle, options: { navigation: masterNavigation } },
       {
         resource: PurchaseTransaction,
@@ -87,7 +111,7 @@ const run = async () => {
     },
     dashboard: {
       handler: async () => {
-        return { some: "output" };
+        return { some: "Selamat datang di SiPPBENTOR" };
       },
       component: AdminBro.bundle("./view/custom-dashboard"),
     },
