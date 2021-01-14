@@ -22,18 +22,37 @@ const Item = require("./models/Item")(sequelize);
 const Employee = require("./models/Employee")(sequelize);
 const Motorcycle = require("./models/Motorcycle")(sequelize);
 
+//Apply association
 Customer.hasMany(Motorcycle);
 Motorcycle.belongsTo(Customer);
 
 const express = require("express");
 const app = express();
 
+//Initiate view
+const masterNavigation = require("./view/masterNavigation");
+
 const run = async () => {
   await sequelize.sync({ force: true });
   const adminBro = new AdminBro({
-    resources: [Customer, Item, Employee, Motorcycle],
+    resources: [
+      { resource: Customer, options: { navigation: masterNavigation } },
+      { resource: Item, options: { navigation: masterNavigation } },
+      { resource: Employee, options: { navigation: masterNavigation } },
+      { resource: Motorcycle, options: { navigation: masterNavigation } },
+    ],
     databases: [],
-    rootPath: "/admin",
+    rootPath: "/",
+    branding: {
+      companyName: "SiPPBENTOR",
+      logo: false,
+    },
+    dashboard: {
+      handler: async () => {
+        return { some: "output" };
+      },
+      component: AdminBro.bundle("./view/custom-dashboard"),
+    },
   });
   const router = AdminBroExpress.buildRouter(adminBro);
 
