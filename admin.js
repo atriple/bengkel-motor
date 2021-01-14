@@ -55,7 +55,7 @@ const masterNavigation = require("./view/masterNavigation");
 const transaksiNavigation = require("./view/transaksiNavigation");
 
 const run = async () => {
-  await sequelize.sync({ force: true });
+  await sequelize.sync();
   const adminBro = new AdminBro({
     resources: [
       {
@@ -115,11 +115,22 @@ const run = async () => {
       },
       component: AdminBro.bundle("./view/custom-dashboard"),
     },
+    pages: {
+      transaksiPembelian: {
+        label: "Transaksi Pembelian",
+        handler: async (request, response, context) => {
+          return {
+            text: "I am fetched from the backend",
+          };
+        },
+        component: AdminBro.bundle("./view/transaksiPembelian"),
+      },
+    },
   });
   const router = AdminBroExpress.buildRouter(adminBro);
 
   app.use(adminBro.options.rootPath, router);
-  app.listen(8080, () => console.log("AdminBro is under localhost:8080/admin"));
+  app.listen(8080, () => console.log("AdminBro is under localhost:8080"));
 };
 
 run();
